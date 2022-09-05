@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Guess
+comment0.text=\r\n\ Write\ a\ description\ of\ class\ Guess\ here.\r\n\r\n\ @author\ (your\ name)\r\n\ @version\ (a\ version\ number\ or\ a\ date)\r\n
+comment1.params=pegs
+comment1.target=Guess(int[])
+comment2.params=
+comment2.target=Guess\ clone()
+comment3.params=solution
+comment3.target=void\ update(int[])
+comment4.params=
+comment4.target=void\ print()
+comment5.params=int1\ int2
+comment5.target=int\ getLower(int,\ int)
+comment6.params=reference
+comment6.target=int[]\ getDistribution(int[])
+numComments=7
