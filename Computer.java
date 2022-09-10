@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 /**
  * Write a description of class Computer here.
@@ -32,15 +33,19 @@ public class Computer
 
     public static void invalid(Board board){
         System.out.println("Looks like you entered something invalid!");
+        System.out.println("Enter your actual solution here.");
+        int[] solution = convert(Interface.getInput(new Scanner(System.in)));
+        int incorrect = getIncorrect(board, solution) + 1;
+        System.out.println("Move number " + incorrect + " had incorrect information.");
         Interface.continuePlay(board);
     }
     
-    public static String[] add(String add, String[] addTo){
-        String[] forReturn = new String[addTo.length + 1];
-        for(int iter = 0; iter < addTo.length; iter++){
-            forReturn[iter] = addTo[iter];
+    public static int[] convert(int integer){
+        String toConvert = integer + "";
+        int[] forReturn = new int[toConvert.length()];
+        for(int iter = 0; iter < forReturn.length; iter++){
+            forReturn[iter] = Integer.parseInt(toConvert.substring(iter, iter + 1));
         }
-        forReturn[addTo.length] = add;
         return forReturn;
     }
 
@@ -48,13 +53,11 @@ public class Computer
         int[] list = cropList(getInitialList());
         String response;
         int guess = 1122;
-        String[] responses = new String[0];
         System.out.println("Guess: " + guess);
         int[] pegs = interpretNumber(guess);
         board.addGuess(pegs);
         System.out.println();
         response = Interface.getPegResponse();
-        responses = add(response, responses);
         board.guesses[board.guesses.length - 1].cp = getBlack(response);
         board.guesses[board.guesses.length - 1].cr = getWhite(response);
         board.print();
@@ -69,7 +72,6 @@ public class Computer
             board.addGuess(pegs);
             System.out.println("Guess: " + guess);
             response = Interface.getPegResponse();
-            responses = add(response, responses);
             board.guesses[board.guesses.length - 1].cp = getBlack(response);
             board.guesses[board.guesses.length - 1].cr = getWhite(response);
             board.print();
@@ -79,6 +81,20 @@ public class Computer
         if(iter > 6){
             invalid(board);
         }
+    }
+    
+    public static int getIncorrect(Board board, int[] solution){
+        String original;
+        String testResponse;
+        for(int iter = 0; iter < board.guesses.length; iter++){
+            original = generateString(board.guesses[iter]);
+            board.guesses[iter].update(solution);
+            testResponse = generateString(board.guesses[iter]);
+            if(!original.equals(testResponse)){
+                return iter;
+            }
+        }
+        return -1;
     }
 
     public static int getBlack(String reference){
