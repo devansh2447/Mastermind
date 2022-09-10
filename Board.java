@@ -26,6 +26,9 @@ public class Board
         Guess guess = new Guess(add);
         guess.update(this.solution);
         this.guesses = add(guess, guesses);
+        if(this.guesses.length == 12){
+            this.state = "loss";
+        }
         if(guess.cp == 4){
             this.state = "vict";
         }

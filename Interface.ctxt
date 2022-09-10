@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Interface
+comment1.params=
+comment1.target=java.lang.String\ getPegResponse()
+comment10.params=
+comment10.target=Board\ getBoard()
+comment11.params=max
+comment11.target=int\ random(int)
+comment2.params=input
+comment2.target=java.lang.String\ returnString(java.lang.String)
+comment3.params=
+comment3.target=void\ init()
+comment4.params=scan
+comment4.target=void\ checkHowToPlay(java.util.Scanner)
+comment5.params=
+comment5.target=void\ launchInstructions()
+comment6.params=
+comment6.target=void\ play()
+comment7.params=board
+comment7.target=void\ continuePlay(Board)
+comment8.params=scan
+comment8.target=int\ getInput(java.util.Scanner)
+comment9.params=reference\ check
+comment9.target=boolean\ contains(int[],\ java.lang.String)
+numComments=12

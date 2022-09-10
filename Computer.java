@@ -25,8 +25,82 @@ public class Computer
             response = generateString(board.guesses[board.guesses.length - 1]);
             list = purge(pegs, list, response);
         }
+        System.out.println("The computer found the solution in " + board.guesses.length + " guesses.");
+        board.state = "play";
+        Interface.continuePlay(board);
+    }
+
+    public static void invalid(Board board){
+        System.out.println("Looks like you entered something invalid!");
+        Interface.continuePlay(board);
     }
     
+    public static String[] add(String add, String[] addTo){
+        String[] forReturn = new String[addTo.length + 1];
+        for(int iter = 0; iter < addTo.length; iter++){
+            forReturn[iter] = addTo[iter];
+        }
+        forReturn[addTo.length] = add;
+        return forReturn;
+    }
+
+    public static void solveWithUser(Board board){
+        int[] list = cropList(getInitialList());
+        String response;
+        int guess = 1122;
+        String[] responses = new String[0];
+        System.out.println("Guess: " + guess);
+        int[] pegs = interpretNumber(guess);
+        board.addGuess(pegs);
+        System.out.println();
+        response = Interface.getPegResponse();
+        responses = add(response, responses);
+        board.guesses[board.guesses.length - 1].cp = getBlack(response);
+        board.guesses[board.guesses.length - 1].cr = getWhite(response);
+        board.print();
+        list = purge(pegs, list, response);
+        int iter = 0;
+        while(board.state.equals("play") && iter < 6 && !response.equals("bbbb")){
+            guess = minimax(list);
+            if(guess == 0){
+                invalid(board);
+            }
+            pegs = interpretNumber(guess);
+            board.addGuess(pegs);
+            System.out.println("Guess: " + guess);
+            response = Interface.getPegResponse();
+            responses = add(response, responses);
+            board.guesses[board.guesses.length - 1].cp = getBlack(response);
+            board.guesses[board.guesses.length - 1].cr = getWhite(response);
+            board.print();
+            list = purge(pegs, list, response);
+            iter++;
+        }
+        if(iter > 6){
+            invalid(board);
+        }
+    }
+
+    public static int getBlack(String reference){
+        int forReturn = 0;
+        for(int iter = 0; iter < reference.length(); iter++){
+            if(reference.charAt(iter) == 'b'){
+                forReturn++;
+            }
+        }
+        return forReturn;
+    }
+
+    public static int getWhite(String reference){
+        int forReturn = 0;
+        for(int iter = 0; iter < reference.length(); iter++){
+            if(reference.charAt(iter) == 'w'){
+                forReturn++;
+            }
+        }
+        return forReturn;
+    }
+
     public static void test(){
         int[] list = cropList(getInitialList());
         Board board;
@@ -42,6 +116,9 @@ public class Computer
     }
 
     public static int minimax(int[] reference){
+        if(reference.length == 0){
+            return 0;
+        }
         int forReturn = reference[0];
         int least = reference.length;
         int score;
