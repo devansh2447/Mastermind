@@ -58,7 +58,6 @@ public class Interface
             Computer.solve(new Board(Computer.interpretNumber(getInput(scan))));
         }
         else if(input.equals("3")){
-            System.out.println("Generating game...");
             System.out.println();
             scan.close();
             System.out.println();

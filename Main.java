@@ -8,7 +8,7 @@
 public class Main
 {
     public static void main(String[] args){
-        System.out.println("Program written by Devansh, algorithm implemented for computer to solve is Donald Knuth's 5-move algorithm.");
+        System.out.println("Program written by Devansh, algorithm implemented for computer to solve is Donald Knuth's algorithm.");
         try{
             try{
                 Interface.init();

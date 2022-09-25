@@ -8,6 +8,7 @@ import java.util.Scanner;
  */
 public class Computer
 {
+    //this method solves when the computer alone figures out what is right and wrong
     public static void solve(Board board){
         int[] list = cropList(getInitialList());
         String response;
@@ -31,6 +32,7 @@ public class Computer
         Interface.continuePlay(board);
     }
 
+    //this method handles the scenario where the user provides incorrect input during option 3
     public static void invalid(Board board){
         System.out.println("Looks like you entered something invalid!");
         System.out.println("Enter your actual solution here.");
@@ -40,6 +42,7 @@ public class Computer
         Interface.continuePlay(board);
     }
     
+    //converts an int to an array of integers    
     public static int[] convert(int integer){
         String toConvert = integer + "";
         int[] forReturn = new int[toConvert.length()];
@@ -49,6 +52,7 @@ public class Computer
         return forReturn;
     }
 
+    //method for option 3
     public static void solveWithUser(Board board){
         int[] list = cropList(getInitialList());
         String response;
@@ -72,17 +76,26 @@ public class Computer
             board.addGuess(pegs);
             System.out.println("Guess: " + guess);
             response = Interface.getPegResponse();
+            if(response.equals("bbbb")){
+                board.state = "vict";
+            }
             board.guesses[board.guesses.length - 1].cp = getBlack(response);
             board.guesses[board.guesses.length - 1].cr = getWhite(response);
             board.print();
             list = purge(pegs, list, response);
             iter++;
         }
-        if(iter > 6){
+        board.state = "play";
+        if(iter == 6){
             invalid(board);
+        }
+        else{
+            System.out.println("The computer found the solution in " + board.guesses.length + " guesses.");
+            Interface.continuePlay(board);
         }
     }
     
+    //finds which move had incorrect input
     public static int getIncorrect(Board board, int[] solution){
         String original;
         String testResponse;
@@ -97,6 +110,7 @@ public class Computer
         return -1;
     }
 
+    //counts number of black pegs in response
     public static int getBlack(String reference){
         int forReturn = 0;
         for(int iter = 0; iter < reference.length(); iter++){
@@ -107,6 +121,7 @@ public class Computer
         return forReturn;
     }
 
+    //counts number of white pegs
     public static int getWhite(String reference){
         int forReturn = 0;
         for(int iter = 0; iter < reference.length(); iter++){
@@ -117,20 +132,28 @@ public class Computer
         return forReturn;
     }
 
+    //test method to find out the max number of moves required
     public static void test(){
         int[] list = cropList(getInitialList());
         Board board;
         int highest = 0;
+        int[] guess = new int[0];
         for(int iter = 0; iter < list.length; iter++){
             board = new Board(interpretNumber(list[iter]));
             solve(board);
             if(board.guesses.length > highest){
                 highest = board.guesses.length;
+                guess = board.solution;
             }
         }
         System.out.println(highest);
+        for(int iter = 0; iter < guess.length; iter++){
+            System.out.print(guess[iter]);
+            System.out.println();
+        }
     }
 
+    //gets next move using minimax
     public static int minimax(int[] reference){
         if(reference.length == 0){
             return 0;
@@ -160,6 +183,7 @@ public class Computer
         return responseList;
     }
 
+    //gets score for each potential guess
     public static int getScore(int[] reference, int check){
         String[] numReference = new String[] {"b", "w", "bw", "bb", "ww", "bbb", "bbw", "bww", "www", "bbbb", "wwww", "bwww", "bbww"};
         int[] distribution = new int[numReference.length];
@@ -170,6 +194,7 @@ public class Computer
         return getLargest(distribution);
     }
 
+    //gets largest number in an array
     public static int getLargest(int[] reference){
         int largest = reference[0];
         for(int iter = 0; iter < reference.length; iter++){
@@ -180,6 +205,7 @@ public class Computer
         return largest;
     }
 
+    //gets index of string within this array
     public static int getIndex(String[] reference, String check){
         for(int iter = 0; iter < reference.length; iter++){
             if(check.equals(reference[iter])){
@@ -189,6 +215,7 @@ public class Computer
         return 0;
     }
 
+    //removes all impossible guesses
     public static int[] purge(int[] guess, int[] reference, String ignore){
         String response;
         Guess check;
@@ -204,6 +231,7 @@ public class Computer
         return reference;
     }
 
+    //generates a string for a certain guess
     public static String generateString(Guess guess){
         String forReturn = "";
         for(int iter = 0; iter < guess.cp; iter++){
@@ -215,6 +243,7 @@ public class Computer
         return forReturn;
     }
 
+    //removes a certain index from an array
     public static int[] removeElement(int[] array, int remove){
         int[] forReturn = new int[array.length - 1];
         int subtract = 0;
@@ -229,6 +258,7 @@ public class Computer
         return forReturn;
     }
 
+    //converts in to int[]
     public static int[] interpretNumber(int interpretInt){
         String interpret = interpretInt + "";
         int[] forReturn = new int[interpret.length()];
@@ -238,6 +268,7 @@ public class Computer
         return forReturn;
     }
 
+    //add element to int[]
     public static int[] add(int[] array, int add){
         int[] forReturn = new int[array.length + 1];
         for(int iter = 0; iter < array.length; iter++){
@@ -247,6 +278,7 @@ public class Computer
         return forReturn;
     }
 
+    //gets initial list of numbers
     public static int[] getInitialList(){
         int[] forReturn = new int[7778];
         for(int iter = 0; iter < forReturn.length; iter++){
@@ -255,6 +287,7 @@ public class Computer
         return forReturn;
     }
 
+    //removes invalid numbers from solution list
     public static int[] cropList(int[] crop){
         for(int iter = 0; iter < crop.length; iter++){
             if(!isValid(crop[iter])){
@@ -265,6 +298,7 @@ public class Computer
         return crop;
     }
 
+    //checks if a number is valid
     public static boolean isValid(int check){
         String checkString = check + "";
         if(checkString.contains("0") || checkString.contains("9") || checkString.contains("7") || checkString.contains("8")){
