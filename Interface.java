@@ -11,12 +11,14 @@ import java.awt.Desktop;
 import java.net.URI;
 public class Interface
 {
+    //gets response for computer's guess
     public static String getPegResponse(){
         System.out.println("Enter the peg response for the computer's guess");
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
     
+    //checks if response for computer's guess is correct
     public static String returnString(String input){
         String[] reference = new String[] {"b", "w", "bw", "bb", "ww", "bbb", "bbw", "bww", "www", "bbbb", "wwww", "bwww", "bbww"};
         for(int iter = 0; iter < reference.length; iter++){
@@ -28,6 +30,7 @@ public class Interface
         return getPegResponse();
     }
     
+    //initializer method
     public static void init() throws java.io.IOException, java.net.URISyntaxException {
         Scanner scan = new Scanner(System.in);
         String input;
@@ -42,6 +45,7 @@ public class Interface
         checkHowToPlay(scan);
     }
     
+    //checks what mode is to be used
     public static void checkHowToPlay(Scanner scan){
         String input;
         System.out.println("Enter 1 to solve it yourself, enter 2 to give your own solution, and enter 3 provide input to the computer with regard to the pegs in the correct place.");
@@ -71,15 +75,17 @@ public class Interface
             System.out.println("Generating game...");
             System.out.println();
             scan.close();
-            play();
+            Computer.solveWithUser(new Board());
         }
     }
     
+    //opens instructions in web browser
     public static void launchInstructions() throws java.net.URISyntaxException, java.io.IOException {
         Desktop desktop =Desktop.getDesktop();
         desktop.browse(new URI("https://en.wikipedia.org/wiki/Mastermind_(board_game)#Gameplay_and_rules"));
     }
     
+    //play against computer
     public static void play(){
         System.out.println("Generating board...");
         Board board = getBoard();
@@ -94,8 +100,10 @@ public class Interface
             System.out.println();
         }
         scan.close();
+        continuePlay(board);
     }
     
+    //check if user wishes to continue
     public static void continuePlay(Board board){
         if(board.state.equals("vict")){
             System.out.println("Looks like you guessed the solution!");
@@ -120,6 +128,7 @@ public class Interface
         }
     }
     
+    //gets input in user vs computer
     public static int getInput(Scanner scan){
         int[] list = Computer.cropList(Computer.getInitialList());
         System.out.println();
@@ -129,11 +138,12 @@ public class Interface
             return Integer.parseInt(forReturn);
         }
         else{
-            System.out.println();
+            System.out.println("Invalid input, please try again.");
             return getInput(scan);
         }
     }
     
+    //checks if a string is equal to any element in an int array
     public static boolean contains(int[] reference, String check){
         for(int iter = 0; iter < reference.length; iter++){
             if(check.equals(reference[iter] + "")){
@@ -143,11 +153,13 @@ public class Interface
         return false;
     }
     
+    //gets board where computer does not play against user or get input from user
     public static Board getBoard(){
         int[] list = Computer.cropList(Computer.getInitialList());
         return new Board(Computer.interpretNumber(list[random(list.length) - 1]));
     }
     
+    //gets random int from 0 to max
     public static int random(int max){
         Random random = new Random();
         return random.nextInt(max + 1);
